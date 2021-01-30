@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/30 20:08:59 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/01/30 21:18:05 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_data	*init_data(char **argv)
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
 	data->not_dead = 1;
+	data->forks = (pthread_mutex_t	*)malloc(sizeof(pthread_mutex_t) * data->num_philos);
 	while (i < data->num_philos)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
@@ -67,14 +68,14 @@ int		main(int argc, char **argv)
 	data = init_data(argv);
 	// init_philos(data);
 	i = 0;
-	// while (data->not_dead) {
-		// printf("%d\n", data->philos->num);
+	while (data->not_dead) {
+		printf("%d\n", data->philos->num);
 		
-		// i = 1;
-		// pthread_create(&data->philos[i].thread, NULL, (void*)&eating, &data->philos[i]);
+		i = 1;
+		pthread_create(&data->philos[i].thread, NULL, (void*)&eating, &data->philos[i]);
 		// pthread_join(data->philos[i].thread, NULL);
-	// 	break;
-	// }
+		break;
+	}
 	// usleep(200);
 	return 0;
 }

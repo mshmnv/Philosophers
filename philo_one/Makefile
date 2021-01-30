@@ -8,7 +8,7 @@ HEADER = philo_one.h
 
 OBJ = $(SRC:.c=.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 %.o:%.c
 	@gcc $(FLAGS) -c $< -o $@
@@ -16,7 +16,7 @@ FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER)
-	gcc main.c $(OBJ)
+	gcc -g main.c $(OBJ)
 
 clean:
 	@rm -f $(OBJ)
