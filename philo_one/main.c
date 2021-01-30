@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/30 21:18:05 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/01/30 22:30:06 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,9 @@ void	init_philos(t_data *data)
 	data->philos = (t_philo*)malloc(sizeof(t_philo) * data->num_philos);
 	while (i < data->num_philos)
 	{
-		
 		data->philos[i].num = i;
 		// data->philos[i].right_fork = i;
 		// data->philos[i].left_fork = (i + 1) % data->num_philos;
-
 		data->philos[i].right_fork = &data->forks[i];
 		data->philos[i].left_fork = &data->forks[(i + 1) % data->num_philos];
 		i++;
@@ -66,16 +64,19 @@ int		main(int argc, char **argv)
 	if (argc != 5)
 		return 0;
 	data = init_data(argv);
-	// init_philos(data);
+	init_philos(data);
 	i = 0;
-	while (data->not_dead) {
-		printf("%d\n", data->philos->num);
-		
+	while (data->not_dead) {		
 		i = 1;
 		pthread_create(&data->philos[i].thread, NULL, (void*)&eating, &data->philos[i]);
-		// pthread_join(data->philos[i].thread, NULL);
+		pthread_create(&data->philos[i].thread, NULL, (void*)&sleeping, &data->philos[i]);
+		pthread_create(&data->philos[i].thread, NULL, (void*)&thinking, &data->philos[i]);
+
+		i = 3;
+		// pthread_create(&data->philos[i].thread, NULL, (void*)&eating, &data->philos[i]);
+
 		break;
 	}
-	// usleep(200);
+	usleep(200);
 	return 0;
 }
