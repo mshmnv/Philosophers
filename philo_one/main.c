@@ -6,54 +6,75 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/29 23:13:06 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/01/30 20:08:59 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// + check_input
+
 // number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]
+
+// + вилка с большим номером + вилка с меньшим номером
+// - вилка с меньшим номером - вилка с большим
 
 #include "philo_one.h"
 
-t_philo	**init_philos(int num_philo)
+void	init_philos(t_data *data)
 {
 	int		i;
-	t_philo	**philos;
 	
-	philos = (t_philo**)malloc(sizeof(t_philo*) * num_philo);
 	i = 0;
-	while (i < num_philo)
+	data->philos = (t_philo*)malloc(sizeof(t_philo) * data->num_philos);
+	while (i < data->num_philos)
 	{
-		philos[i] = (t_philo*)malloc(sizeof(t_philo));
-		philos[i]->num = i;
-		pthread_mutex_init(philos[i]->left, NULL);
-		pthread_mutex_init(philos[i]->right, NULL);
+		
+		data->philos[i].num = i;
+		// data->philos[i].right_fork = i;
+		// data->philos[i].left_fork = (i + 1) % data->num_philos;
+
+		data->philos[i].right_fork = &data->forks[i];
+		data->philos[i].left_fork = &data->forks[(i + 1) % data->num_philos];
 		i++;
 	}
-	return philos;	
 }
 
-int		main(int argc, char** argv)
+t_data	*init_data(char **argv)
 {
-	int	num_philos;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
+	t_data	*data;
+	int i;
+
+	data = (t_data*)malloc(sizeof(t_data));
+	data->num_philos = ft_atoi(argv[1]);
+	data->time_to_die = ft_atoi(argv[2]);
+	data->time_to_eat = ft_atoi(argv[3]);
+	data->time_to_sleep = ft_atoi(argv[4]);
+	data->not_dead = 1;
+	while (i < data->num_philos)
+	{
+		pthread_mutex_init(&data->forks[i], NULL);
+		i++;
+	}
+	return data;
+}
+
+int		main(int argc, char **argv)
+{
+	t_data	*data;
+	int		i;
 	
 	if (argc != 5)
 		return 0;
-	num_philos = ft_atoi(argv[1]);
-	time_to_die = ft_atoi(argv[2]);
-	time_to_eat = ft_atoi(argv[3]);
-	time_to_sleep = ft_atoi(argv[4]);
-
-	t_philo **philos = init_philos(num_philos);
-	int i = 0;
-	while (i < num_philos) {
-		printf("%d\n", philos[i]->num);
-		// pthread_create(philos[i]->thread, NULL, (void*)&eat, philos[i]);
-		break;
-		i++;
-	}
-	
+	data = init_data(argv);
+	// init_philos(data);
+	i = 0;
+	// while (data->not_dead) {
+		// printf("%d\n", data->philos->num);
+		
+		// i = 1;
+		// pthread_create(&data->philos[i].thread, NULL, (void*)&eating, &data->philos[i]);
+		// pthread_join(data->philos[i].thread, NULL);
+	// 	break;
+	// }
+	// usleep(200);
 	return 0;
 }
