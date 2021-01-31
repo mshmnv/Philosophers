@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/31 18:27:13 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/01/31 19:33:51 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,8 @@ int		main(int argc, char **argv)
 	while (data->not_dead) {	
 		i = 0;
 		
-		// break;
 	}
 	
-	// clear(data);
+	clear(data);
 	return 0;
 }

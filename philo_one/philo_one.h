@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:21:17 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/31 18:25:50 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/01/31 19:39:38 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct		s_philo {
 	int				state;
 	pthread_t		thread;
 	int				limit;
+	int				last_meal;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	struct s_data	*data;
@@ -60,7 +61,7 @@ int	ft_atoi(const char *nptr);
 void	init_philos(t_data *data);
 t_data	*init_data(char **argv);
 int		time_now();
-
+void	clear(t_data *data);
 
 /*
 **		actions.c
