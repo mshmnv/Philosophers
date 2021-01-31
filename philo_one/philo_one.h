@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:21:17 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/30 22:32:06 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/01/31 18:25:50 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,22 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-
 #include <unistd.h>
+#include <sys/time.h>
+
+#define EAT		0
+#define THINK	1
+#define SLEEP	2
+#define DIE		3
 
 typedef struct		s_philo {
 	int				num;
+	int				state;
 	pthread_t		thread;
-	// int				left_fork;
-	// int				right_fork;
+	int				limit;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	struct s_data	*data;
 }					t_philo;
 
 typedef struct		s_data
@@ -35,6 +40,7 @@ typedef struct		s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
+	int				num_to_eat;
 	int				not_dead;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
@@ -53,15 +59,19 @@ int	ft_atoi(const char *nptr);
 
 void	init_philos(t_data *data);
 t_data	*init_data(char **argv);
+int		time_now();
+
 
 /*
 **		actions.c
 */
 
-void	*eating(t_philo *philo, t_data *data);
-void	*sleeping(t_philo *philo, t_data *data);
-void	*thinking(t_philo *philo);
-void	*die(t_philo *philo, t_data *data);
+void	*actions(t_philo *philo);
+
+void	eating(t_philo *philo);
+void	sleeping(t_philo *philo);
+void	thinking(t_philo *philo);
+void	die(t_philo *philo);
 
 
 #endif
