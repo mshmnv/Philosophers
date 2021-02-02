@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/31 19:43:45 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/02 15:22:59 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@ void	*actions(t_philo *philo)
 {
 	pthread_detach(philo->thread);
 	philo->last_meal = time_now();
+	philo->limit = philo->last_meal + philo->data->time_to_die;
 	while(philo->state != DIE)
 	{
-		
-		if (philo->data->philos[(philo->num + 1) % 5].state != EAT && philo->data->philos[(philo->num - 1) % 5].state != EAT)
+		if ((time_now() - philo->last_meal) < philo->data->time_to_eat)
+			philo->state = HUNGRY;
+		if (philo->state == HUNGRY && philo->data->philos[(philo->num + 1) % 5].state != EAT && philo->data->philos[(philo->num - 1) % 5].state != EAT)
 		{
-			philo->limit = philo->last_meal + philo->data->time_to_die;
 			eating(philo);
-			usleep(philo->data->time_to_eat);
+			philo->limit = philo->last_meal + philo->data->time_to_die;
 		}
 		else
 		{
@@ -31,11 +32,8 @@ void	*actions(t_philo *philo)
 				die(philo);
 			continue;
 		}
-		
 		sleeping(philo);
-		usleep(philo->data->time_to_sleep);
 		thinking(philo);
-		
 		if (time_now() > philo->limit)
 			die(philo);
 	}
@@ -48,12 +46,12 @@ void	eating(t_philo *philo)
 {
 	philo->state = EAT;
 	pthread_mutex_lock(philo->left_fork);
-	printf("%d has taken a fork\n", philo->num + 1);
+	display(philo, "has taken a fork");
 	pthread_mutex_lock(philo->right_fork);
-	printf("%d has taken a fork\n", philo->num + 1);
+	display(philo, "has taken a fork");
 
-
-	printf("%d is eating\n", philo->num + 1);
+	display(philo, "is eating");
+	usleep(philo->data->time_to_eat * 1000);
 	
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
@@ -63,17 +61,19 @@ void	eating(t_philo *philo)
 void	sleeping(t_philo *philo)
 {
 	philo->state = SLEEP;
-	printf("%d is sleeping\n", philo->num + 1);
+	display(philo, "is sleeping");
+	usleep(philo->data->time_to_sleep * 1000);
 }
 
 void	thinking(t_philo *philo)
 {
 	philo->state = THINK;
-	printf("%d is thinking\n", philo->num + 1);
+	display(philo, "is thinking");
 }
 
 void	die(t_philo *philo)
 {
+	usleep(1000);
 	philo->state = DIE;
-	printf("%d died\n", philo->num + 1);
+	display(philo, "died");
 }

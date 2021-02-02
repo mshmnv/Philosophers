@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:21:17 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/31 19:39:38 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/02 15:19:31 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #define THINK	1
 #define SLEEP	2
 #define DIE		3
+#define HUNGRY	4
 
 typedef struct		s_philo {
 	int				num;
@@ -43,10 +44,11 @@ typedef struct		s_data
 	int				time_to_sleep;
 	int				num_to_eat;
 	int				not_dead;
+	int				start_time;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	write_lock;
 	t_philo			*philos;
 }					t_data;
-
 
 /*
 **		utils.c
@@ -74,5 +76,9 @@ void	sleeping(t_philo *philo);
 void	thinking(t_philo *philo);
 void	die(t_philo *philo);
 
+/*
+**		display.c
+*/
+void	display(t_philo *philo, char *msg);
 
 #endif

@@ -6,16 +6,14 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/01/31 19:33:51 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/02 15:16:53 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // + check_input
-
+// + num_to_eat
 // number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]
 
-// начиная с 1го, потом со 2го и тд
-// смотреть едят ли философы рядом
 
 #include "philo_one.h"
 
@@ -43,12 +41,14 @@ t_data	*init_data(char **argv)
 	int i;
 
 	data = (t_data*)malloc(sizeof(t_data));
+	data->start_time = time_now();
 	data->num_philos = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);	
 	data->time_to_sleep = ft_atoi(argv[4]);
 	data->not_dead = 1;
 	data->forks = (pthread_mutex_t	*)malloc(sizeof(pthread_mutex_t) * data->num_philos);
+	pthread_mutex_init(&data->write_lock, NULL);
 	data->num_to_eat = -1;
 	i = 0;
 	while (i < data->num_philos)
@@ -78,7 +78,7 @@ int		time_now()
 {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
-	return(tv.tv_usec);
+	return(tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
 int		main(int argc, char **argv)
@@ -93,6 +93,8 @@ int		main(int argc, char **argv)
 		data->num_to_eat = ft_atoi(argv[5]);
 
 	i = 0;
+	// data->start_time = time_now();
+	
 	while (i < data->num_philos)
 	{
 		pthread_create(&data->philos[i].thread, NULL, (void*)&actions, &data->philos[i]);
@@ -100,8 +102,7 @@ int		main(int argc, char **argv)
 	}
 
 	while (data->not_dead) {	
-		i = 0;
-		
+		NULL;
 	}
 	
 	clear(data);
