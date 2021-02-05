@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c                                          :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/02 13:37:10 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/05 22:15:56 by lbagg            ###   ########.fr       */
+/*   Created: 2021/02/05 21:49:49 by lbagg             #+#    #+#             */
+/*   Updated: 2021/02/05 21:52:09 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-void	display(t_philo *philo, char *msg)
+int	error(int er_num)
 {
-	pthread_mutex_lock(philo->data->write_lock);
-	printf("%dms\t", (time_now() - philo->data->start_time));
-	printf("%d ", philo->num + 1);
-	printf("%s\n", msg);
-	pthread_mutex_unlock(philo->data->write_lock);
-
+	if (er_num == ER_ARGUMENT)
+		printf("Argument error");
+	if (er_num == ER_MALLOC)
+		printf("Malloc error");
+	return 1;
 }
