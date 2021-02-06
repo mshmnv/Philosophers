@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 18:41:07 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/06 20:19:19 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,17 @@ t_philo	*init_philos(t_data *data)
 	return (philos);
 }
 
+int		init_mutexes(t_data *data)
+{
+	if (!(data->write_lock = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)))
+	|| !(data->die_lock = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t))))
+		return (1);
+	pthread_mutex_init(data->write_lock, NULL);
+	pthread_mutex_init(data->die_lock, NULL);
+	pthread_mutex_lock(data->die_lock);
+	return (0);
+}
+
 t_data	*init_data(char **argv)
 {
 	t_data	*data;
@@ -45,11 +56,10 @@ t_data	*init_data(char **argv)
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
-	data->not_stop = 1;
-	if (!(data->write_lock = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)))
-	|| (!(data->forks = (t_forks*)malloc(sizeof(t_forks) * data->num_philos))))
+	if (init_mutexes(data))
 		return (NULL);
-	pthread_mutex_init(data->write_lock, NULL);
+	if (!(data->forks = (t_forks*)malloc(sizeof(t_forks) * data->num_philos)))
+		return (NULL);
 	i = -1;
 	while (++i < data->num_philos)
 	{
@@ -60,24 +70,6 @@ t_data	*init_data(char **argv)
 		data->forks[i].last_touch = -1;
 	}
 	return (data);
-}
-
-void	clear(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->num_philos)
-	{
-		pthread_mutex_destroy(data->forks[i].fork_mutex);
-		free(data->forks[i].fork_mutex);
-		i++;
-	}
-	pthread_mutex_destroy(data->write_lock);
-	free(data->write_lock);
-	free(data->forks);
-	free(data->philos);
-	free(data);
 }
 
 int		check_args(int argc, char **argv)
@@ -114,8 +106,8 @@ int		main(int argc, char **argv)
 			(void*)&actions, &data->philos[i]);
 		i++;
 	}
-	while (data->not_stop)
-		NULL;
+	pthread_mutex_lock(data->die_lock);
+	pthread_mutex_unlock(data->die_lock);
 	clear(data);
 	return (0);
 }

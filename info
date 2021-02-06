@@ -1,7 +1,4 @@
 * deadlock
-* queue for threads
-* queue: 1->3->5 eats
-
 
 #include <pthread.h>
 
@@ -31,8 +28,7 @@ int pthread_mutex_unlock (pthread_mutex_t *mutex);
 
 
 
-
-** SEMAPHOR ** (philo_three, где философы это разные процессы)
+** SEMAPHOR ** (philo_two/philo_three)
 
 sem_init(sem_t *sem, int pshared, unsigned int value);
 	- value > 0 (сколько вилок)
@@ -40,3 +36,25 @@ int sem_wait(sem_t *sem);
 	- value-- (если value > 0)
 int sem_post(sem_t *sem);
 	- value++ (другой поток ждет пока value станет > 0)
+
+sem_t *sem_open(const char *name, int oflag, mode_t mode, unsigned int value);
+	- creates a new POSIX semaphore or opens an existing semaphore
+	- oflag: Option flags
+		* O_CREAT
+		* O_EXCL - creating a new semaphore, O_EXCL causes sem_open() to fail if a semaphore with sem_name already exists
+	- mode: (input) Permission flags
+int sem_close(sem_t *sem);
+	- is used to indicate that the calling process is finished using the named semaphore indicated by sem
+int sem_unlink(const char *name);
+	- removes the named semaphore referred to by name immediately. The semaphore is destroyed once all other processes that have the semaphore open close it.
+
+
+TESTS
+
+forever:
+	./philo_one 5 800 200 200
+	./philo_one 4 410 200 200
+die:
+	./philo_one 5 410 200 200
+	./philo_one 4 310 200 100
+

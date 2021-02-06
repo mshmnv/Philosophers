@@ -2,9 +2,9 @@
 
 NAME = philo_two
 
-SRC = utils.c actions.c
+SRC = utils.c clear.c
 
-HEADER = philo_one.h
+HEADER = philo_two.h
 
 OBJ = $(SRC:.c=.o)
 

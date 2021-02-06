@@ -2,7 +2,7 @@
 
 NAME = philo_one
 
-SRC = utils.c actions.c
+SRC = utils.c actions.c clear.c
 
 HEADER = philo_one.h
 

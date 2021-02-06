@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:42:44 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 18:46:04 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/06 20:31:47 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,39 @@
 # define SLEEP			2
 # define DIE			3
 
+typedef struct		s_philo {
+	int				num;
+	int				num_to_eat;
+	int				state;
+	pthread_t		thread;
+	int				limit;
+	int				last_meal;
+	struct s_data	*data;
+}					t_philo;
+
+typedef struct		s_data
+{
+	int				num_philos;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				num_to_eat;
+	int				start_time;
+	t_philo			*philos;
+	sem_t			*forks;
+}					t_data;
+
+/*
+**		utils.c
+*/
+int					ft_atoi(const char *nptr);
+void				display(t_philo *philo, char *msg);
+int					check_args(int argc, char **argv);
+int					time_now();
+int					error(int er_num);
+/*
+**		clear.c
+*/
+void				clear(t_data *data);
 
 #endif

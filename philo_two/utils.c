@@ -6,11 +6,11 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 15:45:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 18:39:04 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/06 20:28:47 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 int		ft_atoi(const char *nptr)
 {
@@ -50,28 +50,21 @@ int		time_now(void)
 
 void	display(t_philo *philo, char *msg)
 {
-	pthread_mutex_lock(philo->data->write_lock);
 	printf("%dms\t", (time_now() - philo->data->start_time));
 	printf("%d ", philo->num + 1);
 	printf("%s\n", msg);
-	pthread_mutex_unlock(philo->data->write_lock);
 }
 
-int		check_state(t_philo *philo)
+int		check_args(int argc, char **argv)
 {
-	int	right_num;
-
-	if (philo->left_fork->last_touch != philo->num &&
-		philo->right_fork->last_touch != philo->num)
-	{
-		right_num = (philo->num - 1) % philo->data->num_philos;
-		if (philo->num == 0)
-			right_num = philo->data->num_philos - 1;
-		if (philo->data->philos[(philo->num + 1) %
-			philo->data->num_philos].state != EAT
-			&& philo->data->philos[right_num].state != EAT)
+	if (argc != 5 && argc != 6)
+		return (1);
+	if (ft_atoi(argv[0]) < 2 || ft_atoi(argv[0]) > 200 || ft_atoi(argv[1]) < 60
+		|| ft_atoi(argv[2]) < 60 || ft_atoi(argv[3]) < 60)
+		return (1);
+	if (argc == 6)
+		if (ft_atoi(argv[4]) < 0)
 			return (1);
-	}
 	return (0);
 }
 

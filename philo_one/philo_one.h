@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:21:17 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 18:44:46 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/06 20:30:31 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ typedef struct		s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				num_to_eat;
-	int				not_stop;
 	int				start_time;
 	pthread_mutex_t	*write_lock;
+	pthread_mutex_t	*die_lock;
 	t_philo			*philos;
 	t_forks			*forks;
 }					t_data;
@@ -71,15 +71,19 @@ int					error(int er_num);
 */
 t_philo				*init_philos(t_data *data);
 t_data				*init_data(char **argv);
-void				clear(t_data *data);
+int					init_mutexes(t_data *data);
 int					check_args(int argc, char **argv);
 /*
 **		actions.c
 */
 void				*actions(t_philo *philo);
+void				*watching(t_philo *philo);
 void				eating(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
-void				die(t_philo *philo);
+/*
+**		clear.c
+*/
+void				clear(t_data *data);
 
 #endif
