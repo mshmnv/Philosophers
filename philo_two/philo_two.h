@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/05 21:49:49 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/05 21:52:09 by lbagg            ###   ########.fr       */
+/*   Created: 2021/02/06 18:42:44 by lbagg             #+#    #+#             */
+/*   Updated: 2021/02/06 18:46:04 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 
-int	error(int er_num)
-{
-	if (er_num == ER_ARGUMENT)
-		printf("Argument error");
-	if (er_num == ER_MALLOC)
-		printf("Malloc error");
-	return 1;
-}
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/time.h>
+# include <semaphore.h>
+
+# define ER_ARGUMENT	-1
+# define ER_MALLOC		-2
+
+# define EAT			0
+# define THINK			1
+# define SLEEP			2
+# define DIE			3
+
+
+#endif

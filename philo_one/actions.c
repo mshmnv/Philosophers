@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/05 23:21:53 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/06 18:36:02 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 void	*actions(t_philo *philo)
 {
+	int	i;
+
+	i = 0;
 	pthread_detach(philo->thread);
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
-	while (philo->state != DIE)
+	while (philo->state != DIE && i != philo->data->num_to_eat)
 	{
-		if (philo->data->philos[(philo->num + 1) % philo->data->num_philos].state != EAT
-			&& philo->data->philos[(philo->num - 1) % philo->data->num_philos].state != EAT
-			&& philo->left_fork->last_touch != philo->num && philo->right_fork->last_touch != philo->num)
+		if (check_state(philo))
 			eating(philo);
 		else
 		{
@@ -33,13 +34,16 @@ void	*actions(t_philo *philo)
 		thinking(philo);
 		if (time_now() >= philo->limit)
 			die(philo);
+		i++;
 	}
-	return NULL;
+	philo->data->not_stop = 0;
+	return (NULL);
 }
-
 
 void	eating(t_philo *philo)
 {
+	philo->last_meal = time_now();
+	philo->limit = philo->last_meal + philo->data->time_to_die;
 	philo->state = EAT;
 	pthread_mutex_lock(philo->left_fork->fork_mutex);
 	philo->left_fork->last_touch = philo->num;
@@ -51,8 +55,6 @@ void	eating(t_philo *philo)
 	usleep(philo->data->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->left_fork->fork_mutex);
 	pthread_mutex_unlock(philo->right_fork->fork_mutex);
-	philo->last_meal = time_now();
-	philo->limit = philo->last_meal + philo->data->time_to_die;
 }
 
 void	sleeping(t_philo *philo)
@@ -70,8 +72,6 @@ void	thinking(t_philo *philo)
 
 void	die(t_philo *philo)
 {
-	// usleep(1000);
 	philo->state = DIE;
-	philo->data->not_dead = 0;
 	display(philo, "died");
 }

@@ -1,6 +1,6 @@
 .PHONY: all clean fclean re norme
 
-NAME = philo_one
+NAME = philo_two
 
 SRC = utils.c actions.c
 

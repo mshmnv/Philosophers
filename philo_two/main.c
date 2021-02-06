@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/02 13:37:10 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/05 22:15:56 by lbagg            ###   ########.fr       */
+/*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
+/*   Updated: 2021/02/06 18:43:57 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
-void	display(t_philo *philo, char *msg)
+int main(int argc, char **argv)
 {
-	pthread_mutex_lock(philo->data->write_lock);
-	printf("%dms\t", (time_now() - philo->data->start_time));
-	printf("%d ", philo->num + 1);
-	printf("%s\n", msg);
-	pthread_mutex_unlock(philo->data->write_lock);
 
+	return (NULL);
 }
