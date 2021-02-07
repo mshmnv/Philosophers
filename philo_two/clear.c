@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 20:08:20 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/07 12:22:21 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/07 18:16:39 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,12 @@
 
 void	clear(t_data *data)
 {
-	// int	i;
-
-	// i = 0;
-	// while (i < data->num_philos)
-	// {
-	// 	pthread_mutex_destroy(data->forks[i].fork_mutex);
-	// 	free(data->forks[i].fork_mutex);
-	// 	i++;
-	// }
-	// pthread_mutex_destroy(data->write_lock);
-	// free(data->write_lock);
-	// pthread_mutex_destroy(data->die_lock);
-	// free(data->die_lock);
-	// free(data->forks);
 	sem_close(data->forks);
-	sem_close(data->dead_sem);
-	sem_close(data->write_sem);
+	sem_close(data->die_lock);
+	sem_close(data->write_lock);
+	sem_unlink("forks");
+	sem_unlink("die");
+	sem_unlink("write");
 	free(data->philos);
 	free(data);
 }

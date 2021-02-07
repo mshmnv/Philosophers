@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:42:44 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/07 12:14:29 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/07 19:25:59 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,30 @@ typedef struct		s_data
 	int				num_to_eat;
 	int				start_time;
 	t_philo			*philos;
-	sem_t			*forks_sem;
-	sem_t			*dead_sem;
-	sem_t			*write_sem;
-
+	sem_t			*forks;
+	sem_t			*die_lock;
+	sem_t			*write_lock;
 }					t_data;
-
+/*
+**		main.c
+*/
+t_philo				*init_philos(t_data *data);
+t_data				*init_data(char **argv);
+int					check_args(int argc, char **argv);
+/*
+**		actions.c
+*/
+void				*actions(t_philo *philo);
+void				*watching(t_philo *philo);
+void				eating(t_philo *philo);
+void				sleeping(t_philo *philo);
+void				thinking(t_philo *philo);
 /*
 **		utils.c
 */
 int					ft_atoi(const char *nptr);
 void				display(t_philo *philo, char *msg);
-int					check_args(int argc, char **argv);
+int					check_state(t_philo *philo);
 int					time_now();
 int					error(int er_num);
 /*

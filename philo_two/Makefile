@@ -2,7 +2,7 @@
 
 NAME = philo_two
 
-SRC = utils.c clear.c
+SRC = utils.c clear.c actions.c
 
 HEADER = philo_two.h
 
@@ -16,7 +16,7 @@ FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER) main.c
-	gcc $(FLAGS) main.c $(OBJ) -o philo_one
+	gcc $(FLAGS) main.c $(OBJ) -o philo_two
 
 clean:
 	@rm -f $(OBJ)

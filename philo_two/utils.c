@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 15:45:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/07 12:22:45 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/07 19:08:38 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,29 @@ int		time_now(void)
 
 void	display(t_philo *philo, char *msg)
 {
+	sem_wait(philo->data->write_lock);
 	printf("%dms\t", (time_now() - philo->data->start_time));
 	printf("%d ", philo->num + 1);
 	printf("%s\n", msg);
+	sem_post(philo->data->write_lock);
 }
 
-int		check_args(int argc, char **argv)
+int		check_state(t_philo *philo)
 {
-	if (argc != 5 && argc != 6)
-		return (1);
-	if (ft_atoi(argv[0]) < 2 || ft_atoi(argv[0]) > 200 || ft_atoi(argv[1]) < 60
-		|| ft_atoi(argv[2]) < 60 || ft_atoi(argv[3]) < 60)
-		return (1);
-	if (argc == 6)
-		if (ft_atoi(argv[4]) < 0)
+	int	right_num;
+
+	right_num = (philo->num - 1) % philo->data->num_philos;
+	if (philo->num == 0)
+		right_num = philo->data->num_philos - 1;
+	if (philo->data->philos[(philo->num + 1) %
+			philo->data->num_philos].state != EAT
+			&& philo->data->philos[right_num].state != EAT)
+	{
+		if (philo->data->philos[(philo->num + 1) %
+			philo->data->num_philos].last_meal >= philo->last_meal
+			&& philo->data->philos[right_num].last_meal >= philo->last_meal)
 			return (1);
+	}
 	return (0);
 }
 

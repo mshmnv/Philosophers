@@ -34,8 +34,11 @@ sem_init(sem_t *sem, int pshared, unsigned int value);
 	- value > 0 (сколько вилок)
 int sem_wait(sem_t *sem);
 	- value-- (если value > 0)
+	- lock
 int sem_post(sem_t *sem);
 	- value++ (другой поток ждет пока value станет > 0)
+	- unlock
+
 
 sem_t *sem_open(const char *name, int oflag, mode_t mode, unsigned int value);
 	- creates a new POSIX semaphore or opens an existing semaphore
@@ -58,3 +61,5 @@ die:
 	./philo_one 5 410 200 200
 	./philo_one 4 310 200 100
 
+
+cat test | grep "3 is eating" | wc
