@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 20:59:05 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/07 12:17:06 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,11 @@ t_data	*init_data(char **argv)
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
+	data->forks_sem = sem_open("forks", O_CREAT | O_EXCL, 0644, data->num_philos);
+	data->dead_sem = sem_open("dead", O_CREAT | O_EXCL, 0644, 1);
+	sem_post(data->dead_sem);
+	data->write_sem = sem_open("dead", O_CREAT | O_EXCL, 0644, 1);
 
-	data->forks = sem_open("forks", O_CREAT | O_EXCL, 0644, data->num_philos);
 	return (data);
 }
 
@@ -69,6 +72,8 @@ int main(int argc, char **argv)
 	// 		(void*)&actions, &data->philos[i]);
 	// 	i++;
 	// }
+	sem_wait(data->dead_sem);
+
 	clear(data);
 	return (0);
 }

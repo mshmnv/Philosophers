@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:42:44 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 20:31:47 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/07 12:14:29 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ typedef struct		s_data
 	int				num_to_eat;
 	int				start_time;
 	t_philo			*philos;
-	sem_t			*forks;
+	sem_t			*forks_sem;
+	sem_t			*dead_sem;
+	sem_t			*write_sem;
+
 }					t_data;
 
 /*

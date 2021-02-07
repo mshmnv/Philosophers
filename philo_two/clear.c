@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 20:08:20 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 20:33:06 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/07 12:22:21 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ void	clear(t_data *data)
 	// pthread_mutex_destroy(data->die_lock);
 	// free(data->die_lock);
 	// free(data->forks);
+	sem_close(data->forks);
+	sem_close(data->dead_sem);
+	sem_close(data->write_sem);
 	free(data->philos);
 	free(data);
 }
