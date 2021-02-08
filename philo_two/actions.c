@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/07 19:24:59 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/08 21:13:47 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,17 @@ void	*watching(t_philo *philo)
 {
 	while (1)
 	{
+		if (philo->data->someone_dead)
+			return (NULL);
 		if (philo->state != EAT && time_now() >= philo->limit)
 		{
 			philo->state = DIE;
 			display(philo, "died");
+			philo->data->someone_dead = 1;
 			sem_post(philo->data->die_lock);
 			return (NULL);
 		}
-		usleep(1000);
+		usleep(42);
 	}
 	return (NULL);
 }
@@ -39,14 +42,16 @@ void	*actions(t_philo *philo)
 	philo->limit = philo->last_meal + philo->data->time_to_die;
 	pthread_create(&watch, NULL, (void*)&watching, philo);
 	pthread_detach(watch);
-	while (philo->state != DIE && i != philo->data->num_to_eat)
+	while (philo->state != DIE && i != philo->data->num_to_eat && !philo->data->someone_dead)
 	{
-		// if (check_state(philo))
+		if (check_state(philo))
 			eating(philo);
-		// else
-			// continue;
-		sleeping(philo);
-		thinking(philo);
+		else
+			continue;
+		if (philo->state != DIE && !philo->data->someone_dead)
+			sleeping(philo);
+		if (philo->state != DIE && !philo->data->someone_dead)
+			thinking(philo);
 		i++;
 	}
 	return (NULL);
@@ -56,6 +61,7 @@ void	eating(t_philo *philo)
 {
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
+	philo->data->forks_left -= 2;
 	philo->state = EAT;
 	sem_wait(philo->data->forks);
 	display(philo, "has taken a fork");
@@ -65,6 +71,7 @@ void	eating(t_philo *philo)
 	usleep(philo->data->time_to_eat * 1000);
 	sem_post(philo->data->forks);
 	sem_post(philo->data->forks);
+	philo->data->forks_left += 2;
 }
 
 void	sleeping(t_philo *philo)

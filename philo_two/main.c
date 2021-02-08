@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/07 19:10:48 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/08 21:19:48 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_data	*init_data(char **argv)
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
+	data->forks_left = data->num_philos;
 	sem_unlink("forks");
 	data->forks = sem_open("forks", O_CREAT | O_EXCL, 0644, data->num_philos);
 	sem_unlink("die");
@@ -50,6 +51,8 @@ t_data	*init_data(char **argv)
 	sem_wait(data->die_lock);
 	sem_unlink("write");
 	data->write_lock = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
+
+	data->someone_dead = 0;
 	return (data);
 }
 
@@ -85,7 +88,7 @@ int main(int argc, char **argv)
 	{
 		pthread_create(&data->philos[i].thread, NULL,
 			(void*)&actions, &data->philos[i]);
-		usleep(100);
+		// usleep(100);
 		i++;
 	}
 	sem_wait(data->die_lock);
