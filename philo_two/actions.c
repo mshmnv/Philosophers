@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/13 16:43:18 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/13 21:11:03 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	*actions(t_philo *philo)
 {
 	int			i;
-
+	int flag = 0;
 	i = 0;
 	pthread_detach(philo->thread);
 	philo->last_meal = time_now();
@@ -25,13 +25,27 @@ void	*actions(t_philo *philo)
 		if (check_state(philo))
 			eating(philo);
 		else
+		{	
+			// if (philo->num == 3 && !flag)
+			// {
+			// flag = 1;
+			// display(philo, "");
+			// // 1
+			// printf("%d{%d}\n",(philo->num + 1) % philo->data->num_philos,  (philo->data->philos[(philo->num + 1) % philo->data->num_philos].last_meal >= philo->last_meal));
+			// // 3
+			// printf("%d{%d}\n", (philo->num - 1) % philo->data->num_philos, (philo->data->philos[(philo->num - 1) % philo->data->num_philos].last_meal >= philo->last_meal));
+
+			// }
 			continue;
+		}
 		if (philo->state != DIE)
 		// && !philo->data->someone_dead)
 			sleeping(philo);
 		if (philo->state != DIE)
 		//  && !philo->data->someone_dead)
 			thinking(philo);
+		flag = 0;
+			
 		i++;
 	}
 	return (NULL);

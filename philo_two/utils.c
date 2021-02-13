@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 15:45:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/13 17:10:12 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/13 22:44:40 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,19 @@ void	display(t_philo *philo, char *msg)
 	sem_post(philo->data->write_lock);
 }
 
+int min_lastmeal(t_data *data)
+{
+	int min = 0;
+	int i = 0;
+	while (i < data->num_philos)
+	{
+		if (data->philos[i].last_meal < min)
+			min = data->philos[i].last_meal;
+		i++;
+	}
+	return (min);
+}
+
 int		check_state(t_philo *philo)
 {
 	int	right_num;
@@ -64,11 +77,9 @@ int		check_state(t_philo *philo)
 	right_num = (philo->num - 1) % philo->data->num_philos;
 	if (philo->num == 0)
 		right_num = philo->data->num_philos - 1;
-	
-	if (philo->data->philos[(philo->num + 1) %
-		philo->data->num_philos].last_meal >= philo->last_meal
-		&& philo->data->philos[right_num].last_meal >= philo->last_meal
-		&& philo->data->forks_left > 1)
+	if (philo->data->philos[(philo->num + 1) % philo->data->num_philos].state != EAT
+		&& philo->data->philos[right_num].state != EAT &&
+		philo->last_meal <= min_lastmeal(philo->data) && philo->data->forks_left > 1)
 		return (1);
 	return (0);
 }

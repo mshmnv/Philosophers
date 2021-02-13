@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/13 16:58:46 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/13 22:43:18 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,30 @@ int		check_args(int argc, char **argv)
 	return (0);
 }
 
+// void	check_loop(t_data *data)
+// {
+// 	int	i;
+	
+// 	while (1)
+// 	{
+// 		i = 0;
+// 		while (i < data->num_philos)
+// 		{
+// 			if (data->someone_dead)
+// 				return ;
+// 			if (data->philos[i].state != EAT && time_now() >= data->philos[i].limit)
+// 			{
+// 				data->philos[i].state = DIE;
+// 				display(&data->philos[i], "died");
+// 				data->someone_dead = 1;
+// 				return ;
+// 			}
+// 			i++;
+// 		}
+// 		usleep(100);
+// 	}
+// }
+
 int main(int argc, char **argv)
 {
 	int		i;
@@ -87,17 +111,19 @@ int main(int argc, char **argv)
 	{
 		pthread_create(&data->philos[i].thread, NULL,
 			(void*)&actions, &data->philos[i]);
-		usleep(100);
 		i++;
 	}
+	// check_loop(data);
 	while (1)
 	{
 		i = 0;
+		usleep(100);
 		while (i < data->num_philos)
 		{
 			if (data->someone_dead)
 				return (0);
-			if (data->philos[i].state != EAT && time_now() >= data->philos[i].limit)
+			usleep(100);
+			if (data->philos[i].state != EAT && time_now() > data->philos[i].limit)
 			{
 				data->philos[i].state = DIE;
 				display(&data->philos[i], "died");
@@ -106,7 +132,6 @@ int main(int argc, char **argv)
 			}
 			i++;
 		}
-		usleep(100);
 	}
 	clear(data);
 	return (0);
