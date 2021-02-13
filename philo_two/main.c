@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/08 21:19:48 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/11 13:18:58 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ t_data	*init_data(char **argv)
 	sem_wait(data->die_lock);
 	sem_unlink("write");
 	data->write_lock = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
-
 	data->someone_dead = 0;
 	return (data);
 }
@@ -88,10 +87,26 @@ int main(int argc, char **argv)
 	{
 		pthread_create(&data->philos[i].thread, NULL,
 			(void*)&actions, &data->philos[i]);
-		// usleep(100);
 		i++;
 	}
-	sem_wait(data->die_lock);
+	while (1)
+	{
+		i = 0;
+		while (i < data->num_philos)
+		{
+			if (data->someone_dead)
+				return (0);
+			if (data->philos[i].state != EAT && time_now() >= data->philos[i].limit)
+			{
+				data->philos[i].state = DIE;
+				display(&data->philos[i], "died");
+				data->someone_dead = 1;
+				return (0);
+			}
+			i++;
+		}
+		usleep(100);
+	}
 	clear(data);
 	return (0);
 }
