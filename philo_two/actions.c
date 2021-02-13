@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/11 13:17:51 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/13 16:43:18 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,22 @@ void	*actions(t_philo *philo)
 	philo->limit = philo->last_meal + philo->data->time_to_die;
 	while (philo->state != DIE && i != philo->data->num_to_eat && !philo->data->someone_dead)
 	{
-		if (!check_state(philo) || !eating(philo))
+		if (check_state(philo))
+			eating(philo);
+		else
 			continue;
-		if (philo->state != DIE && !philo->data->someone_dead)
+		if (philo->state != DIE)
+		// && !philo->data->someone_dead)
 			sleeping(philo);
-		if (philo->state != DIE && !philo->data->someone_dead)
+		if (philo->state != DIE)
+		//  && !philo->data->someone_dead)
 			thinking(philo);
 		i++;
 	}
 	return (NULL);
 }
 
-int		eating(t_philo *philo)
+void	eating(t_philo *philo)
 {
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
@@ -48,7 +52,6 @@ int		eating(t_philo *philo)
 	sem_post(philo->data->forks);
 	sem_post(philo->data->forks);
 	philo->data->forks_left += 2;
-	return (1);
 }
 
 void	sleeping(t_philo *philo)
