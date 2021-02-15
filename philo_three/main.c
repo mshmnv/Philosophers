@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/15 23:50:31 by lbagg            ###   ########.fr       */
+/*   Created: 2021/02/15 14:50:55 by lbagg             #+#    #+#             */
+/*   Updated: 2021/02/15 19:38:20 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_three.h"
 
 t_philo	*init_philos(t_data *data)
 {
@@ -67,36 +67,10 @@ int		check_args(int argc, char **argv)
 	return (0);
 }
 
-void	start(t_data *data)
-{
-	int	i;
-
-	i = -1;
-	while (++i < data->num_philos)
-		pthread_create(&data->philos[i].thread, NULL,
-			(void*)&actions, &data->philos[i]);
-	while (1)
-	{
-		i = -1;
-		usleep(100);
-		while (++i < data->num_philos)
-		{
-			usleep(100);
-			if (data->philos[i].state != EAT &&
-				time_now() > data->philos[i].limit)
-			{
-				data->philos[i].state = DIE;
-				display(&data->philos[i], "died");
-				data->someone_dead = 1;
-				return ;
-			}
-		}
-	}
-}
-
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_data	*data;
+	int		i;
 
 	if (check_args(argc, argv + 1))
 		return (error(ER_ARGUMENT));
@@ -107,7 +81,8 @@ int		main(int argc, char **argv)
 	data->num_to_eat = -1;
 	if (argc == 6)
 		data->num_to_eat = ft_atoi(argv[5]);
-	start(data);
-	clear(data);
+
+	
+
 	return (0);
 }

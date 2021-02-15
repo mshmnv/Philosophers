@@ -1,10 +1,10 @@
 .PHONY: all clean fclean re norme
 
-NAME = philo_one
+NAME = philo_three
 
-SRC = utils.c actions.c clear.c
+SRC = utils.c clear.c actions.c
 
-HEADER = philo_one.h
+HEADER = philo_two.h
 
 OBJ = $(SRC:.c=.o)
 

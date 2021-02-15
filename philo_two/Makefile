@@ -16,7 +16,7 @@ FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER) main.c
-	gcc $(FLAGS) main.c $(OBJ) -o philo_two
+	gcc $(FLAGS) main.c $(OBJ) -o $(NAME)
 
 clean:
 	@rm -f $(OBJ)

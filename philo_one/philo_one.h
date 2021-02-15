@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:21:17 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 20:30:31 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/15 14:56:40 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef struct		s_forks
 
 typedef struct		s_philo {
 	int				num;
-	int				num_to_eat;
 	int				state;
 	pthread_t		thread;
 	int				limit;

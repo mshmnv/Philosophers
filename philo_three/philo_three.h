@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_two.h                                        :+:      :+:    :+:   */
+/*   philo_three.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/06 18:42:44 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/15 19:12:53 by lbagg            ###   ########.fr       */
+/*   Created: 2021/02/15 14:51:12 by lbagg             #+#    #+#             */
+/*   Updated: 2021/02/15 19:37:32 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_TWO_H
-# define PHILO_TWO_H
+#ifndef PHILO_THREE_H
+# define PHILO_THREE_H
 
 # include <pthread.h>
 # include <stdio.h>
@@ -31,7 +31,6 @@
 typedef struct		s_philo {
 	int				num;
 	int				state;
-	pthread_t		thread;
 	int				limit;
 	int				last_meal;
 	struct s_data	*data;
@@ -52,30 +51,22 @@ typedef struct		s_data
 	sem_t			*write_lock;
 	int				someone_dead;
 }					t_data;
+
 /*
-**		main.c
+** main.c
 */
 t_philo				*init_philos(t_data *data);
 t_data				*init_data(char **argv);
 int					check_args(int argc, char **argv);
 /*
-**		actions.c
-*/
-void				*actions(t_philo *philo);
-int					check_state(t_philo *philo);
-void				eating(t_philo *philo);
-void				sleeping(t_philo *philo);
-void				thinking(t_philo *philo);
-/*
-**		utils.c
+** utils.c
 */
 int					ft_atoi(const char *nptr);
 void				display(t_philo *philo, char *msg);
 int					time_now();
-int					min_lastmeal(t_data *data);
 int					error(int er_num);
 /*
-**		clear.c
+** clear.c
 */
 void				clear(t_data *data);
 
