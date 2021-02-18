@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   actions.c                                          :+:      :+:    :+:   */
+/*   create_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/16 14:44:04 by lbagg            ###   ########.fr       */
+/*   Created: 2021/02/16 14:53:43 by lbagg             #+#    #+#             */
+/*   Updated: 2021/02/17 09:45:11 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_three.h"
 
 void	*watching(t_philo *philo)
 {
@@ -34,7 +34,6 @@ void	*actions(t_philo *philo)
 	pthread_t	watch;
 	
 	i = 0;
-	pthread_detach(philo->thread);
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
 	pthread_create(&watch, NULL, (void*)&watching, philo);

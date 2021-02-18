@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 15:45:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/15 14:58:51 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/17 09:49:40 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,12 @@ int		time_now(void)
 
 void	display(t_philo *philo, char *msg)
 {
-	pthread_mutex_lock(philo->data->write_lock);
+	sem_wait(philo->data->write_lock);
 	printf("%dms\t", (time_now() - philo->data->start_time));
 	printf("%d ", philo->num + 1);
 	printf("%s\n", msg);
-	pthread_mutex_unlock(philo->data->write_lock);
+	sem_post(philo->data->write_lock);
 }
-
-// int		check_state(t_philo *philo)
-// {
-// 	int	right_num;
-
-// 	if (philo->left_fork->last_touch != philo->num &&
-// 		philo->right_fork->last_touch != philo->num)
-// 	{
-// 		right_num = (philo->num - 1) % philo->data->num_philos;
-// 		if (philo->num == 0)
-// 			right_num = philo->data->num_philos - 1;
-// 		if (philo->data->philos[(philo->num + 1) %
-// 			philo->data->num_philos].state != EAT
-// 			&& philo->data->philos[right_num].state != EAT)
-// 			return (1);
-// 	}
-// 	return (0);
-// }
 
 int		error(int er_num)
 {
@@ -81,5 +63,23 @@ int		error(int er_num)
 		printf("Argument error");
 	if (er_num == ER_MALLOC)
 		printf("Malloc error");
+	if (er_num == ER_FORK)
+		printf("Fork error");
 	return (1);
+}
+
+int		min_lastmeal(t_data *data)
+{
+	int	min;
+	int	i;
+
+	min = 0;
+	i = 0;
+	while (i < data->num_philos)
+	{
+		if (data->philos[i].last_meal < min)
+			min = data->philos[i].last_meal;
+		i++;
+	}
+	return (min);
 }

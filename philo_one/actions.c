@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 20:19:52 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/16 14:46:10 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	*watching(t_philo *philo)
 {
 	while (1)
 	{
+		usleep(100);
 		if (philo->state != EAT && time_now() >= philo->limit)
 		{
 			philo->state = DIE;
@@ -23,7 +24,6 @@ void	*watching(t_philo *philo)
 			pthread_mutex_unlock(philo->data->die_lock);
 			return (NULL);
 		}
-		usleep(1000);
 	}
 	return (NULL);
 }

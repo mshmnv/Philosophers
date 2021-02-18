@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:50:55 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/15 19:38:20 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/17 09:51:46 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_data	*init_data(char **argv)
 	sem_unlink("die");
 	data->die_lock = sem_open("die", O_CREAT | O_EXCL, 0644, 1);
 	sem_wait(data->die_lock);
-	sem_unlink("write");
+	sem_unlink("write"); 
 	data->write_lock = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
 	data->someone_dead = 0;
 	return (data);
@@ -67,6 +67,19 @@ int		check_args(int argc, char **argv)
 	return (0);
 }
 
+int		create_process(t_philo *philo)
+{
+	philo->pid = fork();
+	if (philo->pid < 0)
+		return (1);
+	else if (philo->pid == 0)
+	{
+		actions(philo);
+		exit(0);
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	*data;
@@ -82,7 +95,15 @@ int	main(int argc, char **argv)
 	if (argc == 6)
 		data->num_to_eat = ft_atoi(argv[5]);
 
-	
+	i = -1;
+	while (++i < data->num_philos)
+		if (create_process(&data->philos[i]))
+			return (error(ER_FORK));
 
+	sem_wait(data->die_lock);
+	i = -1;
+	while (++i < data->num_philos)
+		kill(data->philos[i].pid, SIGKILL);
+	clear(data);
 	return (0);
 }
