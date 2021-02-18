@@ -6,40 +6,22 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/16 14:44:04 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/18 13:44:31 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-void	*watching(t_philo *philo)
-{
-	while (1)
-	{
-		usleep(100);
-		if (philo->state != EAT && time_now() > philo->limit)
-		{
-			philo->state = DIE;
-			display(philo, "died");
-			sem_post(philo->data->die_lock);
-			return (NULL);
-		}
-	}
-	return (NULL);
-}
-
 void	*actions(t_philo *philo)
 {
-	int			i;
 	pthread_t	watch;
-	
-	i = 0;
+
 	pthread_detach(philo->thread);
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
 	pthread_create(&watch, NULL, (void*)&watching, philo);
 	pthread_detach(watch);
-	while (philo->state != DIE && i != philo->data->num_to_eat
+	while (philo->state != DIE && philo->num_eat != philo->data->num_to_eat
 		&& !philo->data->someone_dead)
 	{
 		if (check_state(philo))
@@ -50,7 +32,7 @@ void	*actions(t_philo *philo)
 			sleeping(philo);
 		if (philo->state != DIE && !philo->data->someone_dead)
 			thinking(philo);
-		i++;
+		philo->num_eat++;
 	}
 	return (NULL);
 }

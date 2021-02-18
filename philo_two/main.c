@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/16 14:43:54 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/18 14:00:58 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_philo	*init_philos(t_data *data)
 		philos[i].state = THINK;
 		philos[i].num = i;
 		philos[i].data = data;
+		philos[i].num_eat = 0;
 		i++;
 	}
 	return (philos);
@@ -70,6 +71,7 @@ int		check_args(int argc, char **argv)
 int		main(int argc, char **argv)
 {
 	t_data	*data;
+	int		i;
 
 	if (check_args(argc, argv + 1))
 		return (error(ER_ARGUMENT));
@@ -80,12 +82,29 @@ int		main(int argc, char **argv)
 	data->num_to_eat = -1;
 	if (argc == 6)
 		data->num_to_eat = ft_atoi(argv[5]);
-
-	int	i;
 	i = -1;
 	while (++i < data->num_philos)
 		pthread_create(&data->philos[i].thread, NULL,
 			(void*)&actions, &data->philos[i]);
+	if (data->num_to_eat != -1)
+	{
+		while (1)
+		{
+			// printf("!");
+			i = 0;
+			while (i < data->num_philos)
+			{
+				if (data->philos[i].num_eat != data->num_to_eat)
+					i = data->num_philos;
+				i++;
+			}
+			if (i == (data->num_to_eat - 1))
+			{
+				sem_post(data->die_lock);
+				break ;
+			}
+		}
+	}
 	sem_wait(data->die_lock);
 	clear(data);
 	return (0);

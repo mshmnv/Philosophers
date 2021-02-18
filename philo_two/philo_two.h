@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:42:44 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/16 14:44:07 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/18 13:40:48 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct		s_philo {
 	int				limit;
 	int				last_meal;
 	struct s_data	*data;
+	int				num_eat;
 }					t_philo;
 
 typedef struct		s_data
@@ -66,6 +67,9 @@ int					check_state(t_philo *philo);
 void				eating(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
+/*
+**		watching.c
+*/
 void				*watching(t_philo *philo);
 /*
 **		utils.c
