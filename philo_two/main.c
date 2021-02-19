@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/18 14:00:58 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 14:17:24 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,27 @@ int		check_args(int argc, char **argv)
 	return (0);
 }
 
+void	check_eat_count(t_data *data)
+{
+	int	i;
+
+	while (1)
+	{
+		i = 0;
+		while (i < data->num_philos)
+		{
+			if (data->philos[i].num_eat != data->num_to_eat)
+				i = data->num_philos;
+			i++;
+		}
+		if (i == data->num_philos)
+		{
+			sem_post(data->die_lock);
+			return ;
+		}
+	}
+}
+
 int		main(int argc, char **argv)
 {
 	t_data	*data;
@@ -87,24 +108,7 @@ int		main(int argc, char **argv)
 		pthread_create(&data->philos[i].thread, NULL,
 			(void*)&actions, &data->philos[i]);
 	if (data->num_to_eat != -1)
-	{
-		while (1)
-		{
-			// printf("!");
-			i = 0;
-			while (i < data->num_philos)
-			{
-				if (data->philos[i].num_eat != data->num_to_eat)
-					i = data->num_philos;
-				i++;
-			}
-			if (i == (data->num_to_eat - 1))
-			{
-				sem_post(data->die_lock);
-				break ;
-			}
-		}
-	}
+		check_eat_count(data);
 	sem_wait(data->die_lock);
 	clear(data);
 	return (0);

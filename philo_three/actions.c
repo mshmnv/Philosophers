@@ -1,55 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_process.c                                   :+:      :+:    :+:   */
+/*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 14:53:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/17 09:45:11 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 15:05:32 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
-void	*watching(t_philo *philo)
-{
-	while (1)
-	{
-		usleep(100);
-		if (philo->state != EAT && time_now() > philo->limit)
-		{
-			philo->state = DIE;
-			display(philo, "died");
-			sem_post(philo->data->die_lock);
-			return (NULL);
-		}
-	}
-	return (NULL);
-}
-
 void	*actions(t_philo *philo)
 {
-	int			i;
 	pthread_t	watch;
-	
-	i = 0;
+
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
 	pthread_create(&watch, NULL, (void*)&watching, philo);
 	pthread_detach(watch);
-	while (philo->state != DIE && i != philo->data->num_to_eat
-		&& !philo->data->someone_dead)
+	while (philo->state != DIE && philo->num_eat != philo->data->num_to_eat)
 	{
 		if (check_state(philo))
 			eating(philo);
 		else
 			continue;
-		if (philo->state != DIE && !philo->data->someone_dead)
+		philo->num_eat++;
+		if (philo->state != DIE)
 			sleeping(philo);
-		if (philo->state != DIE && !philo->data->someone_dead)
+		if (philo->state != DIE)
 			thinking(philo);
-		i++;
 	}
 	return (NULL);
 }

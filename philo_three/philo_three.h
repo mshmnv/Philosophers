@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:51:12 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/17 09:49:34 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 14:38:33 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct		s_philo {
 	int				last_meal;
 	pid_t			pid;
 	struct s_data	*data;
+	int				num_eat;
 }					t_philo;
 
 typedef struct		s_data
@@ -52,18 +53,18 @@ typedef struct		s_data
 	int				forks_left;
 	sem_t			*die_lock;
 	sem_t			*write_lock;
-	int				someone_dead;
 }					t_data;
 
 /*
-** main.c
+**		main.c
 */
 t_philo				*init_philos(t_data *data);
 t_data				*init_data(char **argv);
 int					check_args(int argc, char **argv);
-void				create_process(t_philo *philo);
+int					create_process(t_philo *philo);
+void				check_eat_count(t_data *data);
 /*
-** actions.c
+**		actions.c
 */
 void				*actions(t_philo *philo);
 void				eating(t_philo *philo);
@@ -71,7 +72,11 @@ void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
 int					check_state(t_philo *philo);
 /*
-** utils.c
+**		wathcing.c
+*/
+void	*watching(t_philo *philo);
+/*
+**		utils.c
 */
 int					ft_atoi(const char *nptr);
 void				display(t_philo *philo, char *msg);
@@ -79,7 +84,7 @@ int					time_now();
 int					error(int er_num);
 int					min_lastmeal(t_data *data);
 /*
-** clear.c
+**		clear.c
 */
 void				clear(t_data *data);
 

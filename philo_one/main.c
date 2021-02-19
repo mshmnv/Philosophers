@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 20:19:19 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 13:55:33 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_philo	*init_philos(t_data *data)
 		philos[i].right_fork = &data->forks[i];
 		philos[i].left_fork = &data->forks[(i + 1) % data->num_philos];
 		philos[i].data = data;
+		philos[i].num_eat = 0;
 		i++;
 	}
 	return (philos);
@@ -56,6 +57,7 @@ t_data	*init_data(char **argv)
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
+	data->someone_dead = 0;
 	if (init_mutexes(data))
 		return (NULL);
 	if (!(data->forks = (t_forks*)malloc(sizeof(t_forks) * data->num_philos)))
@@ -72,17 +74,25 @@ t_data	*init_data(char **argv)
 	return (data);
 }
 
-int		check_args(int argc, char **argv)
+void	check_eat_count(t_data *data)
 {
-	if (argc != 5 && argc != 6)
-		return (1);
-	if (ft_atoi(argv[0]) < 2 || ft_atoi(argv[0]) > 200 || ft_atoi(argv[1]) < 60
-		|| ft_atoi(argv[2]) < 60 || ft_atoi(argv[3]) < 60)
-		return (1);
-	if (argc == 6)
-		if (ft_atoi(argv[4]) < 0)
-			return (1);
-	return (0);
+	int	i;
+
+	while (1)
+	{
+		i = 0;
+		while (i < data->num_philos)
+		{
+			if (data->philos[i].num_eat != data->num_to_eat)
+				i = data->num_philos;
+			i++;
+		}
+		if (i == data->num_philos)
+		{
+			pthread_mutex_unlock(data->die_lock);
+			return ;
+		}
+	}
 }
 
 int		main(int argc, char **argv)
@@ -106,6 +116,8 @@ int		main(int argc, char **argv)
 			(void*)&actions, &data->philos[i]);
 		i++;
 	}
+	if (data->num_to_eat != -1)
+		check_eat_count(data);
 	pthread_mutex_lock(data->die_lock);
 	pthread_mutex_unlock(data->die_lock);
 	clear(data);

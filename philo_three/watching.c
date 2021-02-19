@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/18 13:34:16 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 13:33:20 by lbagg            ###   ########.fr       */
+/*   Created: 2021/02/19 14:07:33 by lbagg             #+#    #+#             */
+/*   Updated: 2021/02/19 14:53:32 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_three.h"
 
 void	*watching(t_philo *philo)
 {
@@ -22,7 +22,6 @@ void	*watching(t_philo *philo)
 		if (philo->state != EAT && time_now() > philo->limit)
 		{
 			philo->state = DIE;
-			philo->data->someone_dead = 1;
 			display(philo, "died");
 			sem_post(philo->data->die_lock);
 			return (NULL);

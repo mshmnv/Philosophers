@@ -6,48 +6,33 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/16 14:46:10 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 14:03:10 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-void	*watching(t_philo *philo)
-{
-	while (1)
-	{
-		usleep(100);
-		if (philo->state != EAT && time_now() >= philo->limit)
-		{
-			philo->state = DIE;
-			display(philo, "died");
-			pthread_mutex_unlock(philo->data->die_lock);
-			return (NULL);
-		}
-	}
-	return (NULL);
-}
-
 void	*actions(t_philo *philo)
 {
-	int			i;
 	pthread_t	watch;
 
-	i = 0;
 	pthread_detach(philo->thread);
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
 	pthread_create(&watch, NULL, (void*)&watching, philo);
 	pthread_detach(watch);
-	while (philo->state != DIE && i != philo->data->num_to_eat)
+	while (philo->state != DIE && !philo->data->someone_dead
+			&& philo->num_eat != philo->data->num_to_eat)
 	{
 		if (check_state(philo))
 			eating(philo);
 		else
 			continue;
-		sleeping(philo);
-		thinking(philo);
-		i++;
+		philo->num_eat++;
+		if (philo->state != DIE && !philo->data->someone_dead)
+			sleeping(philo);
+		if (philo->state != DIE && !philo->data->someone_dead)
+			thinking(philo);
 	}
 	return (NULL);
 }
@@ -80,4 +65,22 @@ void	thinking(t_philo *philo)
 {
 	philo->state = THINK;
 	display(philo, "is thinking");
+}
+
+int		check_state(t_philo *philo)
+{
+	int	right_num;
+
+	if (philo->left_fork->last_touch != philo->num &&
+		philo->right_fork->last_touch != philo->num)
+	{
+		right_num = (philo->num - 1) % philo->data->num_philos;
+		if (philo->num == 0)
+			right_num = philo->data->num_philos - 1;
+		if (philo->data->philos[(philo->num + 1) %
+			philo->data->num_philos].state != EAT
+			&& philo->data->philos[right_num].state != EAT)
+			return (1);
+	}
+	return (0);
 }

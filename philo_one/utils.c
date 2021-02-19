@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 15:45:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/06 18:39:04 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 13:55:38 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,6 @@ void	display(t_philo *philo, char *msg)
 	pthread_mutex_unlock(philo->data->write_lock);
 }
 
-int		check_state(t_philo *philo)
-{
-	int	right_num;
-
-	if (philo->left_fork->last_touch != philo->num &&
-		philo->right_fork->last_touch != philo->num)
-	{
-		right_num = (philo->num - 1) % philo->data->num_philos;
-		if (philo->num == 0)
-			right_num = philo->data->num_philos - 1;
-		if (philo->data->philos[(philo->num + 1) %
-			philo->data->num_philos].state != EAT
-			&& philo->data->philos[right_num].state != EAT)
-			return (1);
-	}
-	return (0);
-}
-
 int		error(int er_num)
 {
 	if (er_num == ER_ARGUMENT)
@@ -82,4 +64,17 @@ int		error(int er_num)
 	if (er_num == ER_MALLOC)
 		printf("Malloc error");
 	return (1);
+}
+
+int		check_args(int argc, char **argv)
+{
+	if (argc != 5 && argc != 6)
+		return (1);
+	if (ft_atoi(argv[0]) < 2 || ft_atoi(argv[0]) > 200 || ft_atoi(argv[1]) < 60
+		|| ft_atoi(argv[2]) < 60 || ft_atoi(argv[3]) < 60)
+		return (1);
+	if (argc == 6)
+		if (ft_atoi(argv[4]) < 0)
+			return (1);
+	return (0);
 }

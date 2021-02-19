@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/18 13:44:31 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 13:09:36 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void	*actions(t_philo *philo)
 			eating(philo);
 		else
 			continue;
+		philo->num_eat++;
 		if (philo->state != DIE && !philo->data->someone_dead)
 			sleeping(philo);
 		if (philo->state != DIE && !philo->data->someone_dead)
 			thinking(philo);
-		philo->num_eat++;
 	}
 	return (NULL);
 }

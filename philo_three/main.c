@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:50:55 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/17 09:51:46 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 15:04:53 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_philo	*init_philos(t_data *data)
 		philos[i].state = THINK;
 		philos[i].num = i;
 		philos[i].data = data;
+		philos[i].num_eat = 0;
 		i++;
 	}
 	return (philos);
@@ -48,9 +49,8 @@ t_data	*init_data(char **argv)
 	sem_unlink("die");
 	data->die_lock = sem_open("die", O_CREAT | O_EXCL, 0644, 1);
 	sem_wait(data->die_lock);
-	sem_unlink("write"); 
+	sem_unlink("write");
 	data->write_lock = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
-	data->someone_dead = 0;
 	return (data);
 }
 
@@ -80,7 +80,28 @@ int		create_process(t_philo *philo)
 	return (0);
 }
 
-int	main(int argc, char **argv)
+// void	check_eat_count(t_data *data)
+// {
+// 	int	i;
+
+// 	while (1)
+// 	{
+// 		i = 0;
+// 		while (i < data->num_philos)
+// 		{
+// 			if (data->philos[i].num_eat != data->num_to_eat)
+// 				i = data->num_philos;
+// 			i++;
+// 		}
+// 		if (i == data->num_philos)
+// 		{
+// 			sem_post(data->die_lock);
+// 			return ;
+// 		}
+// 	}
+// }
+
+int		main(int argc, char **argv)
 {
 	t_data	*data;
 	int		i;
@@ -94,12 +115,12 @@ int	main(int argc, char **argv)
 	data->num_to_eat = -1;
 	if (argc == 6)
 		data->num_to_eat = ft_atoi(argv[5]);
-
 	i = -1;
 	while (++i < data->num_philos)
 		if (create_process(&data->philos[i]))
 			return (error(ER_FORK));
-
+	// if (data->num_to_eat != -1)
+	// 	check_eat_count(data);
 	sem_wait(data->die_lock);
 	i = -1;
 	while (++i < data->num_philos)

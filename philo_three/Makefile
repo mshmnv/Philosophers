@@ -2,7 +2,7 @@
 
 NAME = philo_three
 
-SRC = utils.c clear.c create_process.c
+SRC = utils.c clear.c actions.c watching.c
 
 HEADER = philo_three.h
 

@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:21:17 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/15 14:56:40 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 13:55:48 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct		s_philo {
 	t_forks			*left_fork;
 	t_forks			*right_fork;
 	struct s_data	*data;
+	int				num_eat;
 }					t_philo;
 
 typedef struct		s_data
@@ -56,6 +57,7 @@ typedef struct		s_data
 	pthread_mutex_t	*die_lock;
 	t_philo			*philos;
 	t_forks			*forks;
+	int				someone_dead;
 }					t_data;
 /*
 **		utils.c
@@ -63,23 +65,27 @@ typedef struct		s_data
 int					ft_atoi(const char *nptr);
 void				display(t_philo *philo, char *msg);
 int					time_now();
-int					check_state(t_philo *philo);
 int					error(int er_num);
+int					check_args(int argc, char **argv);
+/*
+**		watching.c
+*/
+void				*watching(t_philo *philo);
 /*
 **		main.c
 */
 t_philo				*init_philos(t_data *data);
 t_data				*init_data(char **argv);
 int					init_mutexes(t_data *data);
-int					check_args(int argc, char **argv);
+void				check_eat_count(t_data *data);
 /*
 **		actions.c
 */
 void				*actions(t_philo *philo);
-void				*watching(t_philo *philo);
 void				eating(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
+int					check_state(t_philo *philo);
 /*
 **		clear.c
 */

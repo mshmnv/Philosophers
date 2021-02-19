@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:42:44 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/18 13:40:48 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/19 13:13:41 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct		s_data
 t_philo				*init_philos(t_data *data);
 t_data				*init_data(char **argv);
 int					check_args(int argc, char **argv);
+void				check_eat_count(t_data *data);
 /*
 **		actions.c
 */
