@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:50:55 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 15:04:53 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/21 11:59:54 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,26 +80,30 @@ int		create_process(t_philo *philo)
 	return (0);
 }
 
-// void	check_eat_count(t_data *data)
-// {
-// 	int	i;
+void	*check_eat_count(t_data *data)
+{
+	int	i;
 
-// 	while (1)
-// 	{
-// 		i = 0;
-// 		while (i < data->num_philos)
-// 		{
-// 			if (data->philos[i].num_eat != data->num_to_eat)
-// 				i = data->num_philos;
-// 			i++;
-// 		}
-// 		if (i == data->num_philos)
-// 		{
-// 			sem_post(data->die_lock);
-// 			return ;
-// 		}
-// 	}
-// }
+	while (1)
+	{
+		i = 0;
+		while (i < data->num_philos)
+		{
+			// printf("%d\n", i);
+			if (data->philos[i].num_eat != data->num_to_eat)
+				// i = data->num_philos;
+				i = -1;
+			i++;
+		}
+		if (i == data->num_philos)
+		{
+			// printf("!!!!!!!!\n");
+			sem_post(data->die_lock);
+			return (NULL);
+		}
+	}
+	return (NULL);
+}
 
 int		main(int argc, char **argv)
 {
@@ -119,8 +123,17 @@ int		main(int argc, char **argv)
 	while (++i < data->num_philos)
 		if (create_process(&data->philos[i]))
 			return (error(ER_FORK));
+
+	// pthread_t thread;
 	// if (data->num_to_eat != -1)
-	// 	check_eat_count(data);
+	// {
+		// check_eat_count(data);
+
+		// pthread_create(&thread, NULL, (void*)&check_eat_count, data);
+		// pthread_detach(thread);
+	// }
+		// check_eat_count(data);
+		
 	sem_wait(data->die_lock);
 	i = -1;
 	while (++i < data->num_philos)

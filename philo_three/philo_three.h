@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:51:12 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 14:38:33 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/21 11:30:23 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_philo				*init_philos(t_data *data);
 t_data				*init_data(char **argv);
 int					check_args(int argc, char **argv);
 int					create_process(t_philo *philo);
-void				check_eat_count(t_data *data);
+void				*check_eat_count(t_data *data);
 /*
 **		actions.c
 */
@@ -74,7 +74,7 @@ int					check_state(t_philo *philo);
 /*
 **		wathcing.c
 */
-void	*watching(t_philo *philo);
+void				*watching(t_philo *philo);
 /*
 **		utils.c
 */
