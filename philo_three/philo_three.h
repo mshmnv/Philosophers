@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:51:12 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/21 18:25:58 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/22 14:23:19 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,8 @@ typedef struct		s_data
 	int				start_time;
 	t_philo			*philos;
 	sem_t			*forks;
-	int				forks_left;
-	sem_t			*die_lock;
 	sem_t			*write_lock;
+	sem_t			*helper;
 	int				someone_dead;
 }					t_data;
 
@@ -71,7 +70,6 @@ void				*actions(t_philo *philo);
 void				eating(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
-int					check_state(t_philo *philo);
 /*
 **		wathcing.c
 */

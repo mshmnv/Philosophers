@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:50:55 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/21 18:38:36 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/22 14:23:10 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,13 @@ t_data	*init_data(char **argv)
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
-	data->forks_left = data->num_philos;
 	data->someone_dead = 0;
 	sem_unlink("forks");
 	data->forks = sem_open("forks", O_CREAT | O_EXCL, 0644, data->num_philos);
-	sem_unlink("die");
-	data->die_lock = sem_open("die", O_CREAT | O_EXCL, 0644, 1);
-	sem_wait(data->die_lock);
 	sem_unlink("write");
 	data->write_lock = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
+	sem_unlink("helper");
+	data->helper = sem_open("helper", O_CREAT | O_EXCL, 0644, 1);
 	return (data);
 }
 
@@ -98,8 +96,10 @@ int		main(int argc, char **argv)
 		data->num_to_eat = ft_atoi(argv[5]);
 	i = -1;
 	while (++i < data->num_philos)
+	{
 		if (create_process(&data->philos[i]))
 			return (error(ER_FORK));
+	}
 	waitpid(-1, &status, 0);
 	i = -1;
 	while (++i < data->num_philos)

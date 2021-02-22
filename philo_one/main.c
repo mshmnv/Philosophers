@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/22 10:57:24 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/22 13:31:05 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,13 @@ t_data	*init_data(char **argv)
 
 	if (!(data = (t_data*)malloc(sizeof(t_data))))
 		return (NULL);
-	data->start_time = time_now();
 	data->num_philos = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
 	data->someone_dead = 0;
-	if (init_mutexes(data))
-		return (NULL);
-	if (!(data->forks = (t_forks*)malloc(sizeof(t_forks) * data->num_philos)))
+	if (init_mutexes(data) ||
+		!(data->forks = (t_forks*)malloc(sizeof(t_forks) * data->num_philos)))
 		return (NULL);
 	i = -1;
 	while (++i < data->num_philos)
@@ -72,6 +70,8 @@ t_data	*init_data(char **argv)
 			return (NULL);
 		pthread_mutex_init(data->forks[i].fork_mutex, NULL);
 		data->forks[i].last_touch = -1;
+		if (!(i % 2))
+			data->forks[i].last_touch = i;
 	}
 	return (data);
 }
@@ -108,16 +108,14 @@ int		main(int argc, char **argv)
 		return (error(ER_MALLOC));
 	if (!(data->philos = init_philos(data)))
 		return (error(ER_MALLOC));
+	data->start_time = time_now();
 	data->num_to_eat = -1;
 	if (argc == 6)
 		data->num_to_eat = ft_atoi(argv[5]);
-	i = 0;
-	while (i < data->num_philos)
-	{
+	i = -1;
+	while (++i < data->num_philos)
 		pthread_create(&data->philos[i].thread, NULL,
 			(void*)&actions, &data->philos[i]);
-		i++;
-	}
 	if (data->num_to_eat != -1)
 		check_eat_count(data);
 	pthread_mutex_lock(data->die_lock);

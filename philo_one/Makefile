@@ -8,10 +8,10 @@ HEADER = philo_one.h
 
 OBJ = $(SRC:.c=.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror 
 
 %.o:%.c
-	@gcc $(FLAGS) -c $< -o $@
+	@gcc  $(FLAGS) -c $< -o $@
 
 all: $(NAME)
 

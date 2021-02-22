@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 14:53:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/21 18:36:30 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/22 14:26:23 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ void	*actions(t_philo *philo)
 	pthread_detach(watch);
 	while (philo->num_eat != philo->data->num_to_eat)
 	{
-		if (check_state(philo))
-			eating(philo);
-		else
-			continue;
+		eating(philo);
 		philo->num_eat++;
 		sleeping(philo);
 		thinking(philo);
@@ -35,11 +32,12 @@ void	*actions(t_philo *philo)
 
 void	eating(t_philo *philo)
 {
-	philo->data->forks_left -= 2;
+	sem_wait(philo->data->helper);
 	sem_wait(philo->data->forks);
 	display(philo, "has taken a fork");
 	sem_wait(philo->data->forks);
 	display(philo, "has taken a fork");
+	sem_post(philo->data->helper);
 	philo->state = EAT;
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
@@ -47,7 +45,6 @@ void	eating(t_philo *philo)
 	usleep(philo->data->time_to_eat * 1000);
 	sem_post(philo->data->forks);
 	sem_post(philo->data->forks);
-	philo->data->forks_left += 2;
 }
 
 void	sleeping(t_philo *philo)
@@ -61,18 +58,4 @@ void	thinking(t_philo *philo)
 {
 	philo->state = THINK;
 	display(philo, "is thinking");
-}
-
-int		check_state(t_philo *philo)
-{
-	int	right_num;
-
-	usleep(100);
-	right_num = (philo->num - 1) % philo->data->num_philos;
-	if (philo->num == 0)
-		right_num = philo->data->num_philos - 1;
-	if (philo->last_meal <= min_lastmeal(philo->data)
-		&& philo->data->forks_left > 1)
-		return (1);
-	return (0);
 }
