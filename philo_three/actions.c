@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 14:53:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/21 11:35:17 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/21 18:36:30 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,17 @@ void	*actions(t_philo *philo)
 	philo->limit = philo->last_meal + philo->data->time_to_die;
 	pthread_create(&watch, NULL, (void*)&watching, philo);
 	pthread_detach(watch);
-	while (philo->state != DIE && philo->num_eat != philo->data->num_to_eat)
+	while (philo->num_eat != philo->data->num_to_eat)
 	{
 		if (check_state(philo))
 			eating(philo);
 		else
 			continue;
 		philo->num_eat++;
-		if (philo->state != DIE)
-			sleeping(philo);
-		if (philo->state != DIE)
-			thinking(philo);
+		sleeping(philo);
+		thinking(philo);
 	}
-	return (NULL);
+	exit(0);
 }
 
 void	eating(t_philo *philo)

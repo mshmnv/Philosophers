@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 13:34:16 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 13:33:20 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/21 18:59:22 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	*watching(t_philo *philo)
 	while (1)
 	{
 		usleep(100);
-		if (philo->num_eat == philo->data->num_to_eat)
+		if (philo->num_eat == philo->data->num_to_eat
+			|| philo->data->someone_dead)
 			return (NULL);
 		if (philo->state != EAT && time_now() > philo->limit)
 		{

@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:51:12 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/21 11:30:23 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/21 18:25:58 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct		s_data
 	int				forks_left;
 	sem_t			*die_lock;
 	sem_t			*write_lock;
+	int				someone_dead;
 }					t_data;
 
 /*

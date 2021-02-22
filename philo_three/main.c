@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/15 14:50:55 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/21 11:59:54 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/21 18:38:36 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_data	*init_data(char **argv)
 	data->time_to_eat = ft_atoi(argv[3]);
 	data->time_to_sleep = ft_atoi(argv[4]);
 	data->forks_left = data->num_philos;
+	data->someone_dead = 0;
 	sem_unlink("forks");
 	data->forks = sem_open("forks", O_CREAT | O_EXCL, 0644, data->num_philos);
 	sem_unlink("die");
@@ -80,35 +81,11 @@ int		create_process(t_philo *philo)
 	return (0);
 }
 
-void	*check_eat_count(t_data *data)
-{
-	int	i;
-
-	while (1)
-	{
-		i = 0;
-		while (i < data->num_philos)
-		{
-			// printf("%d\n", i);
-			if (data->philos[i].num_eat != data->num_to_eat)
-				// i = data->num_philos;
-				i = -1;
-			i++;
-		}
-		if (i == data->num_philos)
-		{
-			// printf("!!!!!!!!\n");
-			sem_post(data->die_lock);
-			return (NULL);
-		}
-	}
-	return (NULL);
-}
-
 int		main(int argc, char **argv)
 {
 	t_data	*data;
 	int		i;
+	int		status;
 
 	if (check_args(argc, argv + 1))
 		return (error(ER_ARGUMENT));
@@ -123,18 +100,7 @@ int		main(int argc, char **argv)
 	while (++i < data->num_philos)
 		if (create_process(&data->philos[i]))
 			return (error(ER_FORK));
-
-	// pthread_t thread;
-	// if (data->num_to_eat != -1)
-	// {
-		// check_eat_count(data);
-
-		// pthread_create(&thread, NULL, (void*)&check_eat_count, data);
-		// pthread_detach(thread);
-	// }
-		// check_eat_count(data);
-		
-	sem_wait(data->die_lock);
+	waitpid(-1, &status, 0);
 	i = -1;
 	while (++i < data->num_philos)
 		kill(data->philos[i].pid, SIGKILL);

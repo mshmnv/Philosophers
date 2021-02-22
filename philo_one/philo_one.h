@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:21:17 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 13:55:48 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/21 23:48:34 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct		s_philo {
 	t_forks			*right_fork;
 	struct s_data	*data;
 	int				num_eat;
+	pthread_mutex_t	*check;
 }					t_philo;
 
 typedef struct		s_data
@@ -85,7 +86,6 @@ void				*actions(t_philo *philo);
 void				eating(t_philo *philo);
 void				sleeping(t_philo *philo);
 void				thinking(t_philo *philo);
-int					check_state(t_philo *philo);
 /*
 **		clear.c
 */

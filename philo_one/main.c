@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 13:20:48 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 13:55:33 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/22 10:57:24 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ t_philo	*init_philos(t_data *data)
 		philos[i].left_fork = &data->forks[(i + 1) % data->num_philos];
 		philos[i].data = data;
 		philos[i].num_eat = 0;
+		philos[i].check = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+		pthread_mutex_init(philos[i].check, NULL);
 		i++;
 	}
 	return (philos);
