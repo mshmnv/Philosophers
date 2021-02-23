@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:42:44 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 13:13:41 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/23 16:54:33 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct		s_data
 	sem_t			*die_lock;
 	sem_t			*write_lock;
 	int				someone_dead;
+	sem_t			*helper;
 }					t_data;
 /*
 **		main.c

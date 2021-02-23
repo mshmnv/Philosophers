@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 15:45:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/15 15:34:17 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/23 17:01:39 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int		min_lastmeal(t_data *data)
 	i = 0;
 	while (i < data->num_philos)
 	{
-		if (data->philos[i].last_meal < min)
+		if (data->philos[i].last_meal < min &&
+			data->philos[i].num_eat != data->num_to_eat)
 			min = data->philos[i].last_meal;
 		i++;
 	}

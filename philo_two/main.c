@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/06 18:43:30 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 14:17:24 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/23 17:01:13 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ t_data	*init_data(char **argv)
 	sem_unlink("write");
 	data->write_lock = sem_open("write", O_CREAT | O_EXCL, 0644, 1);
 	data->someone_dead = 0;
+	sem_unlink("helper");
+	data->helper = sem_open("helper", O_CREAT | O_EXCL, 0644, 1);
 	return (data);
 }
 
@@ -81,7 +83,7 @@ void	check_eat_count(t_data *data)
 				i = data->num_philos;
 			i++;
 		}
-		if (i == data->num_philos)
+		if (i == data->num_philos || data->someone_dead)
 		{
 			sem_post(data->die_lock);
 			return ;

@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 22:49:54 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 13:09:36 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/23 16:53:39 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,13 @@ void	*actions(t_philo *philo)
 
 void	eating(t_philo *philo)
 {
+	sem_wait(philo->data->helper);
 	philo->data->forks_left -= 2;
 	sem_wait(philo->data->forks);
 	display(philo, "has taken a fork");
 	sem_wait(philo->data->forks);
 	display(philo, "has taken a fork");
+	sem_post(philo->data->helper);
 	philo->state = EAT;
 	philo->last_meal = time_now();
 	philo->limit = philo->last_meal + philo->data->time_to_die;
@@ -71,7 +73,6 @@ int		check_state(t_philo *philo)
 {
 	int	right_num;
 
-	usleep(100);
 	right_num = (philo->num - 1) % philo->data->num_philos;
 	if (philo->num == 0)
 		right_num = philo->data->num_philos - 1;

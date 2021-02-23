@@ -1,17 +1,14 @@
 * deadlock
+* scrabled view
 
 #include <pthread.h>
-
 
 int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine) (void *), void *arg);
 	(attr - NULL | start_routine - функция над arg)
 
-
-
 int pthread_join(pthread_t thread, void **retval);
 	(retval = NULL)
 	- waits for the thread
-
 
 int pthread_detach(pthread_t thread);
 	- When a detached thread terminates, its resources are automatically released back to the system
@@ -27,7 +24,6 @@ int pthread_mutex_lock (pthread_mutex_t *mutex);
 int pthread_mutex_unlock (pthread_mutex_t *mutex);
 
 
-
 ** SEMAPHOR ** (philo_two/philo_three)
 
 sem_init(sem_t *sem, int pshared, unsigned int value);
@@ -38,7 +34,6 @@ int sem_wait(sem_t *sem);
 int sem_post(sem_t *sem);
 	- value++ (другой поток ждет пока value станет > 0)
 	- unlock
-
 
 sem_t *sem_open(const char *name, int oflag, mode_t mode, unsigned int value);
 	- creates a new POSIX semaphore or opens an existing semaphore
@@ -51,15 +46,17 @@ int sem_close(sem_t *sem);
 int sem_unlink(const char *name);
 	- removes the named semaphore referred to by name immediately. The semaphore is destroyed once all other processes that have the semaphore open close it.
 
-
 TESTS
 
 forever:
 	./philo_one 5 800 200 200
 	./philo_one 4 410 200 200
+	./philo_one 6 410 200 200
+
 die:
 	./philo_one 5 410 200 200
 	./philo_one 4 310 200 100
+	./philo_one 3 310 200 100
 
-
+./philo_one 5 800 200 200 7 > test
 cat test | grep "3 is eating" | wc

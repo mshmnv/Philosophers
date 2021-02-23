@@ -6,7 +6,7 @@
 /*   By: lbagg <lbagg@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 15:45:43 by lbagg             #+#    #+#             */
-/*   Updated: 2021/02/19 13:55:38 by lbagg            ###   ########.fr       */
+/*   Updated: 2021/02/23 12:46:30 by lbagg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int		error(int er_num)
 		printf("Argument error");
 	if (er_num == ER_MALLOC)
 		printf("Malloc error");
+	printf("\n");
 	return (1);
 }
 
