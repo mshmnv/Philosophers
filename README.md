@@ -1,5 +1,4 @@
 # Dining Philosophers
-threads, mutexes, semaphores, shared memory
 
 * A number of philosophers are sitting at a round table doing one of three things: eating, thinking or sleeping.
 * While eating, they are not thinking or sleeping, while sleeping, they are not eating or thinking and of course, while thinking, they are not eating or sleeping.
