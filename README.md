@@ -1,14 +1,29 @@
 # Dining Philosophers
 threads, mutexes, semaphores, shared memory
 
-• A number of philosophers are sitting at a round table doing one of three things: eating, thinking or sleeping.
-• While eating, they are not thinking or sleeping, while sleeping, they are not eating or thinking and of course, while thinking, they are not eating or sleeping.
-• The philosophers sit at a circular table with a large bowl of spaghetti in the center.
-• There are some forks on the table.
-• As spaghetti is difficult to serve and eat with a single fork, it is assumed that a philosopher must eat with two forks, one for each hand.
-• The philosophers must never be starving.
-• Every philosopher needs to eat.
-• The simulation stops when a philosopher dies.
+* A number of philosophers are sitting at a round table doing one of three things: eating, thinking or sleeping.
+* While eating, they are not thinking or sleeping, while sleeping, they are not eating or thinking and of course, while thinking, they are not eating or sleeping.
+* The philosophers sit at a circular table with a large bowl of spaghetti in the center.
+* There are some forks on the table.
+* As spaghetti is difficult to serve and eat with a single fork, it is assumed that a philosopher must eat with two forks, one for each hand.
+* The philosophers must never be starving.
+* Every philosopher needs to eat.
+* The simulation stops when a philosopher dies.
+
+## philo_one
+* *philosopher = thread*
+* *forks = mutexes*
+* *one fork between each philosopher*
+
+## philo_two
+* *philosopher = thread*
+* *forks = semaphore*
+* *forks are in the middle of the table*
+
+## philo_three
+* *philosopher = process*
+* *forks = semaphore*
+* *forks are in the middle of the table*
 
 ### Usage
 ```
